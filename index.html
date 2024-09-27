@@ -3,13 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Modern Homepage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
-    <title>Adurite Clone</title>
 </head>
 <body>
-    <h1>Welcome to Adurite Clone</h1>
-    <a href="login.html">Login</a>
-    <a href="signup.html">Sign Up</a>
+    <div id="loader" class="loader"></div> <!-- Loading spinner -->
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">YourApp</div>
+        <div class="navbar-buttons">
+            <button id="signupButton" class="nav-button">Sign Up</button>
+            <button id="loginButton" class="nav-button">Login</button>
+            <img id="profilePicture" class="nav-button hidden" src="" alt="Profile" />
+        </div>
+    </nav>
+
+    <div id="content" class="content hidden"> <!-- Main content -->
+        <h1>Welcome to Your Modern App</h1>
+        <!-- Other main content -->
+    </div>
+
+    <!-- Cookie Consent -->
+    <div id="cookie-consent" class="cookie-consent hidden">
+        <p>This website uses cookies to enhance the user experience. <a href="#">Learn more</a>.</p>
+        <button id="acceptCookies">Accept</button>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
