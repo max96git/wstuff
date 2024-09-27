@@ -1,46 +1,39 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadUserProfile();
-    document.getElementById('toggleThemeButton')?.addEventListener('click', toggleDarkMode);
-    document.getElementById('savePictureButton')?.addEventListener('click', saveProfilePicture);
+document.addEventListener('DOMContentLoaded', () => {
+    // Hide loader
+    document.getElementById('loader').style.display = 'none';
+    // Show content
+    document.getElementById('content').classList.remove('hidden');
+
+    // Cookie consent logic
+    const cookieConsent = document.getElementById('cookie-consent');
+    const acceptCookies = document.getElementById('acceptCookies');
+
+    if (!localStorage.getItem('cookiesAccepted')) {
+        cookieConsent.classList.remove('hidden');
+    }
+
+    acceptCookies.addEventListener('click', () => {
+        localStorage.setItem('cookiesAccepted', 'true');
+        cookieConsent.classList.add('hidden');
+    });
+
+    // Button functionality
+    document.getElementById('signupButton').addEventListener('click', async () => {
+        // Your signup logic here
+        alert('Sign Up clicked!');
+    });
+
+    document.getElementById('loginButton').addEventListener('click', async () => {
+        // Your login logic here
+        alert('Login clicked!');
+    });
+
+    // Example of setting profile picture
+    const isLoggedIn = false; // Replace with actual authentication check
+    if (isLoggedIn) {
+        document.getElementById('profilePicture').src = 'path_to_profile_picture.jpg'; // Set the profile picture path
+        document.getElementById('profilePicture').classList.remove('hidden');
+        document.getElementById('signupButton').classList.add('hidden');
+        document.getElementById('loginButton').classList.add('hidden');
+    }
 });
-
-async function loadUserProfile() {
-    const response = await fetch('/api/user');
-    const data = await response.json();
-    document.getElementById('usernameDisplay').innerText = data.username;
-    document.getElementById('profilePicture').src = data.profilePicture || 'public/default-profile.png';
-}
-
-function toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-    const theme = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
-    localStorage.setItem('theme', theme);
-}
-
-async function saveProfilePicture() {
-    const input = document.getElementById('profilePicInput');
-    if (input.files.length > 0) {
-        const formData = new FormData();
-        formData.append('profilePicture', input.files[0]);
-        
-        const response = await fetch('/api/updateProfilePicture', {
-            method: 'POST',
-            body: formData,
-        });
-
-        const data = await response.json();
-        if (data.success) {
-            alert('Profile picture updated!');
-            loadUserProfile();
-        } else {
-            alert('Error: ' + data.message);
-        }
-    }
-}
-
-function loadTheme() {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
-}
