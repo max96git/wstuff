@@ -6,14 +6,15 @@
     <title>Marketplace</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <div class="navbar-logo">Marketplace</div>
         <div class="navbar-links">
             <a href="publish.html">Publish Item</a>
-            <a href="login.html" id="loginLink">Login</a>
-            <a href="signup.html" id="signupLink">Sign Up</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
             <img src="path_to_profile_picture" alt="Profile" id="profilePicture" style="display:none;">
         </div>
     </nav>
@@ -22,7 +23,9 @@
         <h1>Welcome to the Marketplace</h1>
         <p>Discover and publish amazing items!</p>
     </div>
-    
+
+    <div id="itemList" class="item-list"></div>
+
     <script src="app.js"></script>
 </body>
 </html>
