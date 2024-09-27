@@ -2,7 +2,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Hide loader
     document.getElementById('loader').style.display = 'none';
     // Show content
-    document.getElementById('content').classList.remove('hidden');
+    const content = document.getElementById('content');
+    if (content) {
+        content.classList.remove('hidden');
+    }
 
     // Cookie consent logic
     const cookieConsent = document.getElementById('cookie-consent');
@@ -18,22 +21,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Button functionality
-    document.getElementById('signupButton').addEventListener('click', async () => {
-        // Your signup logic here
-        alert('Sign Up clicked!');
+    document.getElementById('signupButton')?.addEventListener('click', (event) => {
+        // Redirect to signup page
+        window.location.href = 'signup.html';
     });
 
-    document.getElementById('loginButton').addEventListener('click', async () => {
-        // Your login logic here
-        alert('Login clicked!');
+    document.getElementById('loginButton')?.addEventListener('click', (event) => {
+        // Redirect to login page
+        window.location.href = 'login.html';
     });
 
-    // Example of setting profile picture
-    const isLoggedIn = false; // Replace with actual authentication check
-    if (isLoggedIn) {
-        document.getElementById('profilePicture').src = 'path_to_profile_picture.jpg'; // Set the profile picture path
-        document.getElementById('profilePicture').classList.remove('hidden');
-        document.getElementById('signupButton').classList.add('hidden');
-        document.getElementById('loginButton').classList.add('hidden');
+    // Handle signup form submission
+    const signupForm = document.getElementById('signupForm');
+    if (signupForm) {
+        signupForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Your signup logic here (API call)
+            alert(`Signing up: ${username}, ${email}`);
+            // Clear form after submission
+            signupForm.reset();
+        });
     }
-});
+
+    // Handle login form submission
+    const loginForm = document.getElementById('loginForm');
