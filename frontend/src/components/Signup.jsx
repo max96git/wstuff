@@ -1,55 +1,53 @@
 // src/components/Signup.jsx
 import React, { useState } from 'react';
-import { signup } from '../api/api';
+import axios from 'axios';
 
 const Signup = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
-    const [usernameTaken, setUsernameTaken] = useState(false);
+    const [usernameError, setUsernameError] = useState('');
 
-    const handleSignup = async (e) => {
-        e.preventDefault();
-        setError('');
+    const handleUsernameChange = async (e) => {
+        const { value } = e.target;
+        setUsername(value);
+
         try {
-            const result = await signup(username, password);
-            // Handle successful signup (e.g., redirect or display a success message)
+            const response = await axios.post('/api/auth/check-username', { username: value });
+            setUsernameError(response.data.message === 'Username is available.' ? '' : 'Username is taken.');
         } catch (error) {
-            if (error.message === 'Username is taken.') {
-                setUsernameTaken(true);
-            } else {
-                setError('Signup failed. Please try again.');
-            }
+            setUsernameError('Error checking username.');
+        }
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        if (usernameError) return; // Prevent submission if username is invalid
+
+        try {
+            await axios.post('/api/auth/signup', { username, password });
+            alert('User created successfully!');
+        } catch (error) {
+            alert('Error creating user.');
         }
     };
 
     return (
-        <div>
-            <h1>Sign Up</h1>
-            <form onSubmit={handleSignup}>
-                <div>
-                    <label>Username:</label>
-                    <input 
-                        type="text" 
-                        value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
-                        required 
-                    />
-                    {usernameTaken && <p style={{ color: 'red' }}>Username is taken.</p>}
-                </div>
-                <div>
-                    <label>Password:</label>
-                    <input 
-                        type="password" 
-                        value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required 
-                    />
-                </div>
-                <button type="submit">Sign Up</button>
-                {error && <p style={{ color: 'red' }}>{error}</p>}
-            </form>
-        </div>
+        <form onSubmit={handleSubmit}>
+            <input
+                type="text"
+                placeholder="Username"
+                value={username}
+                onChange={handleUsernameChange}
+            />
+            {usernameError && <p style={{ color: 'red' }}>{usernameError}</p>}
+            <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+            />
+            <button type="submit">Sign Up</button>
+        </form>
     );
 };
 
