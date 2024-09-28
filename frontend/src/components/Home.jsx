@@ -1,14 +1,21 @@
 // src/components/Home.jsx
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import './Home.css'; // Custom CSS for styling
 
 const Home = () => {
+    const history = useHistory();
+
+    const handleJoinNow = () => {
+        history.push('/signup');
+    };
+
     return (
         <div className="home-container">
             <header className="hero-section">
                 <h1>Welcome to Hexanoid</h1>
                 <p>Your marketplace for limiteds and accounts</p>
-                <button>Join Now</button>
+                <button onClick={handleJoinNow} className="join-button">Join Now</button>
             </header>
 
             <section className="featured-items">
