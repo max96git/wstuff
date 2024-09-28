@@ -1,43 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { fetchLatestItems } from '../api/api';
-import SellLimiteds from './SellLimiteds';
-import SellAccounts from './SellAccounts';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
-    const [latestItems, setLatestItems] = useState([]);
+  const [items, setItems] = useState([]);
 
-    const loadLatestItems = async () => {
-        try {
-            const items = await fetchLatestItems();
-            setLatestItems(items);
-        } catch (error) {
-            console.error("Error fetching latest items:", error);
-        }
+  useEffect(() => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('/api/items'); // Adjust the API endpoint accordingly
+        setItems(response.data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      }
     };
 
-    useEffect(() => {
-        loadLatestItems();
-    }, []);
+    fetchItems();
+  }, []);
 
-    return (
-        <div>
-            <h1>Welcome to the Marketplace</h1>
-            <button onClick={() => /* Logic to open SellLimiteds */}>
-                Publish Limited Item
-            </button>
-            <button onClick={() => /* Logic to open SellAccounts */}>
-                Publish Account
-            </button>
-            <h2>Latest Items</h2>
-            <ul>
-                {latestItems.map((item) => (
-                    <li key={item.id}>
-                        {item.itemLink || item.accountLink} - {item.paymentMethod}
-                    </li>
-                ))}
-            </ul>
-        </div>
-    );
+  return (
+    <div>
+      <h1>Welcome to Our Marketplace</h1>
+      <button>
+        <Link to="/sell-limiteds">Publish Limiteds</Link>
+      </button>
+      <button>
+        <Link to="/sell-accounts">Publish Accounts</Link>
+      </button>
+      
+      <h2>Latest Listings</h2>
+      <ul>
+        {items.length > 0 ? (
+          items.map(item => (
+            <li key={item.id}>
+              Item: {item.name} | Price: {item.price}
+            </li>
+          ))
+        ) : (
+          <li>No items available.</li>
+        )}
+      </ul>
+    </div>
+  );
 };
 
 export default Home;
