@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import SellLimiteds from './SellLimiteds';
+import SellAccounts from './SellAccounts';
 
 const Home = () => {
   const [items, setItems] = useState([]);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchItems = async () => {
       try {
-        const response = await axios.get('/api/items'); // Adjust the API endpoint accordingly
+        const response = await axios.get('/api/items');
         setItems(response.data);
       } catch (error) {
-        console.error('Error fetching items:', error);
+        setError('Error fetching items: ' + (error.response ? error.response.data : error.message));
       }
     };
 
@@ -20,26 +22,20 @@ const Home = () => {
 
   return (
     <div>
-      <h1>Welcome to Our Marketplace</h1>
-      <button>
-        <Link to="/sell-limiteds">Publish Limiteds</Link>
-      </button>
-      <button>
-        <Link to="/sell-accounts">Publish Accounts</Link>
-      </button>
-      
-      <h2>Latest Listings</h2>
-      <ul>
-        {items.length > 0 ? (
-          items.map(item => (
+      <h1>Welcome to the Marketplace</h1>
+      {error && <p>{error}</p>}
+      <div>
+        <h2>Latest Items</h2>
+        <ul>
+          {items.map(item => (
             <li key={item.id}>
-              Item: {item.name} | Price: {item.price}
+              <a href={item.link}>{item.name}</a> - {item.price}
             </li>
-          ))
-        ) : (
-          <li>No items available.</li>
-        )}
-      </ul>
+          ))}
+        </ul>
+      </div>
+      <SellLimiteds />
+      <SellAccounts />
     </div>
   );
 };
