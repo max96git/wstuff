@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { publishLimitedItem } from '../api/api';
 
 const SellLimiteds = () => {
     const [itemLink, setItemLink] = useState('');
     const [paymentMethod, setPaymentMethod] = useState('paypal');
-    
+    const [walletAddress, setWalletAddress] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const newItem = {
-            link: itemLink,
-            method: paymentMethod,
-        };
-
+        const itemData = { itemLink, paymentMethod, walletAddress };
         try {
-            // Make an API call to submit the sold item
-            await axios.post('/api/sell-limited', newItem);
-            // Optionally clear the form
-            setItemLink('');
-            setPaymentMethod('paypal');
+            const result = await publishLimitedItem(itemData);
+            console.log(result); // Handle success (e.g., show a message or update state)
         } catch (error) {
-            console.error('Error submitting sold item:', error);
+            console.error("Error publishing limited item:", error);
         }
     };
 
@@ -39,6 +32,15 @@ const SellLimiteds = () => {
                     <option value="paypal">PayPal</option>
                     <option value="crypto">Crypto</option>
                 </select>
+                {paymentMethod === 'crypto' && (
+                    <input
+                        type="text"
+                        placeholder="Wallet Address"
+                        value={walletAddress}
+                        onChange={(e) => setWalletAddress(e.target.value)}
+                        required
+                    />
+                )}
                 <button type="submit">Submit</button>
             </form>
         </div>
