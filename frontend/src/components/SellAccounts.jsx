@@ -20,10 +20,9 @@ const SellAccounts = () => {
         cryptoAddress,
         amount,
       });
-      // Handle success response
       console.log('Account published:', response.data);
     } catch (error) {
-      console.error('Error publishing account:', error);
+      console.error('Error publishing account:', error.response ? error.response.data : error.message);
     }
   };
 
@@ -31,35 +30,50 @@ const SellAccounts = () => {
     <div className="sell-accounts">
       <h2>Sell Accounts</h2>
       <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Roblox Account Link"
-          value={accountLink}
-          onChange={(e) => setAccountLink(e.target.value)}
-          required
-        />
-        <select value={paymentMethod} onChange={handlePaymentMethodChange}>
-          <option value="paypal">PayPal</option>
-          <option value="crypto">Crypto</option>
-        </select>
+        <div>
+          <label htmlFor="accountLink">Roblox Account Link:</label>
+          <input
+            type="text"
+            id="accountLink"
+            value={accountLink}
+            onChange={(e) => setAccountLink(e.target.value)}
+            required
+          />
+        </div>
+        
+        <div>
+          <label>Payment Method:</label>
+          <select value={paymentMethod} onChange={handlePaymentMethodChange}>
+            <option value="paypal">PayPal</option>
+            <option value="crypto">Crypto</option>
+          </select>
+        </div>
+        
         {paymentMethod === 'crypto' && (
           <>
-            <input
-              type="text"
-              placeholder="Crypto Wallet Address"
-              value={cryptoAddress}
-              onChange={(e) => setCryptoAddress(e.target.value)}
-              required
-            />
-            <input
-              type="number"
-              placeholder="Amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
+            <div>
+              <label htmlFor="cryptoAddress">Crypto Wallet Address:</label>
+              <input
+                type="text"
+                id="cryptoAddress"
+                value={cryptoAddress}
+                onChange={(e) => setCryptoAddress(e.target.value)}
+                required
+              />
+            </div>
+            <div>
+              <label htmlFor="amount">Amount:</label>
+              <input
+                type="number"
+                id="amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                required
+              />
+            </div>
           </>
         )}
+        
         <button type="submit">Submit</button>
       </form>
     </div>
