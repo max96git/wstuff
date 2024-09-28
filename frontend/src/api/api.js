@@ -1,14 +1,15 @@
 // src/api/api.js
 const API_URL = process.env.REACT_APP_API_URL;
+import axios from 'axios';
 
-export const signup = async (username, password) => {
-    const response = await fetch(`${API_URL}/signup`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ username, password }),
-    });
+export const signupUser = async (userData) => {
+    try {
+        const response = await axios.post('/api/signup', userData);
+        return response.data; // Return the response data if needed
+    } catch (error) {
+        throw new Error(error.response.data.message || 'Signup failed');
+    }
+};
 
     if (!response.ok) {
         const errorData = await response.json();
