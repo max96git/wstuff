@@ -7,23 +7,23 @@ const Signup = () => {
     const [usernameError, setUsernameError] = useState('');
     const [signupError, setSignupError] = useState('');
 
-    const handleUsernameChange = async (e) => {
-        const { value } = e.target;
-        setUsername(value);
+   const handleUsernameChange = async (e) => {
+    const { value } = e.target;
+    setUsername(value); // Update the username state
 
-        if (!value) {
-            setUsernameError('');
-            return;
-        }
+    if (!value) {
+        setUsernameError('');
+        return; // Exit if the input is empty
+    }
 
-        try {
-            const response = await axios.post('/api/auth/check-username', { username: value });
-            setUsernameError(response.data.message === 'Username is available.' ? '' : 'Username is taken.');
-        } catch (error) {
-            console.error('Error checking username:', error);
-            setUsernameError('Error checking username.');
-        }
-    };
+    try {
+        const response = await axios.post('/api/auth/check-username', { username: value });
+        setUsernameError(response.data.message === 'Username is available.' ? '' : 'Username is taken.');
+    } catch (error) {
+        console.error('Error checking username:', error);
+        setUsernameError('Error checking username.'); // Provide a clear message
+    }
+};
 
     const handleSignup = async (e) => {
         e.preventDefault();
