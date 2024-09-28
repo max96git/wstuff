@@ -1,38 +1,47 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function SellLimited() {
-  const [robloxItemLink, setRobloxItemLink] = useState('');
-  const [image, setImage] = useState(null);
+const SellLimiteds = () => {
+  const [itemLink, setItemLink] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('paypal');
+  const [walletAddress, setWalletAddress] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    const formData = new FormData();
-    formData.append('robloxItemLink', robloxItemLink);
-    formData.append('image', image);
-
-    const response = await fetch('/api/sell/limited', {
-      method: 'POST',
-      body: formData,
-    });
-    const data = await response.json();
-    alert(data.message);
+    // Handle the submission logic here
   };
 
   return (
     <div>
-      <h1>Sell Roblox Limited Item</h1>
+      <h2>Sell Limited Items</h2>
       <form onSubmit={handleSubmit}>
-        <label>Roblox Limited Item Link:
-          <input type="url" value={robloxItemLink} onChange={(e) => setRobloxItemLink(e.target.value)} required />
-        </label>
-        <label>Product Image (Recommend size: 1:1):
-          <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} required />
-        </label>
+        <input
+          type="text"
+          placeholder="Enter Roblox Limited Item Link"
+          value={itemLink}
+          onChange={(e) => setItemLink(e.target.value)}
+          required
+        />
+        <select onChange={(e) => setPaymentMethod(e.target.value)}>
+          <option value="paypal">PayPal</option>
+          <option value="crypto">Crypto</option>
+        </select>
+        {paymentMethod === 'crypto' && (
+          <>
+            <input
+              type="text"
+              placeholder="Wallet Address"
+              value={walletAddress}
+              onChange={(e) => setWalletAddress(e.target.value)}
+              required
+            />
+            {/* Add additional fields for crypto type and amount if needed */}
+          </>
+        )}
         <button type="submit">Submit</button>
       </form>
     </div>
   );
-}
+};
 
-export default SellLimited;
+export default SellLimiteds;
