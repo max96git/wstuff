@@ -7,11 +7,11 @@ const router = express.Router();
 // Check if username is taken
 router.post('/check-username', async (req, res) => {
     const { username } = req.body;
-    
+
     if (!username) {
         return res.status(400).json({ message: 'Username is required.' });
     }
-    
+
     try {
         const user = await User.findOne({ username });
         if (user) {
@@ -19,7 +19,7 @@ router.post('/check-username', async (req, res) => {
         }
         return res.status(200).json({ message: 'Username is available.' });
     } catch (error) {
-        console.error(error);
+        console.error('Error checking username:', error);
         return res.status(500).json({ message: 'Error checking username.' });
     }
 });
