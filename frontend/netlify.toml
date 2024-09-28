@@ -1,3 +1,10 @@
 [build]
-  publish = "build"
-  command = "npm run build && npm install react-dom"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "16.x" # or any version you want to use
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
