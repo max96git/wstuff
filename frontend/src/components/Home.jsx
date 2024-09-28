@@ -1,35 +1,44 @@
-// src/components/Home.jsx
-import React from 'react';
-import { useNavigate } from 'react-router-dom'; // Change to useNavigate
-import './Home.css'; // Import your CSS
+import React, { useEffect, useState } from 'react';
 
 const Home = () => {
-    const navigate = useNavigate(); // Initialize useNavigate
+  const [items, setItems] = useState([]);
 
-    const handleJoinNow = () => {
-        navigate('/signup'); // Use navigate to go to the signup page
+  useEffect(() => {
+    // Function to fetch latest sold items
+    const fetchItems = async () => {
+      try {
+        const response = await fetch('/api/latest-sold-items'); // Adjust the API endpoint as necessary
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setItems(data);
+      } catch (error) {
+        console.error('Error fetching items:', error);
+      }
     };
 
-    return (
-        <div className="home-container">
-            <header className="hero-section">
-                <h1>Welcome to Hexanoid</h1>
-                <p>Your marketplace for limiteds and accounts</p>
-                <button onClick={handleJoinNow} className="join-button">Join Now</button>
-            </header>
+    fetchItems(); // Initial fetch
 
-            <section className="featured-items">
-                <h2>Featured Items</h2>
-                <div className="item-grid">
-                    {/* Map through featured items */}
-                </div>
-            </section>
+    // Set up interval for periodic fetching
+    const intervalId = setInterval(fetchItems, 5000); // Poll every 5 seconds
+    return () => clearInterval(intervalId); // Cleanup
+  }, []);
 
-            <footer>
-                <p>Join our community and start selling today!</p>
-            </footer>
-        </div>
-    );
+  return (
+    <div>
+      <h2>Latest Sold Items</h2>
+      {items.length === 0 ? (
+        <p>No items sold yet. (Updates every 5 seconds)</p>
+      ) : (
+        items.map(item => (
+          <div key={item.id}>
+            <p>{item.link} - {item.method}</p>
+          </div>
+        ))
+      )}
+    </div>
+  );
 };
 
 export default Home;
