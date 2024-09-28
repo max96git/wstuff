@@ -1,0 +1,15 @@
+/* index.css */
+
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif; /* Use Google Font "Inter" */
+    background-color: #f5f5f5; /* Light background */
+    color: #333; /* Dark text */
+}
+
+h1, h2, h3 {
+    font-family: 'Inter', sans-serif;
+    color: #222; /* Heading color */
+}
+
+/* Add more styles as needed */
