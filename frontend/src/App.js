@@ -1,20 +1,22 @@
 // src/App.js
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './components/Home';
 import Signup from './components/Signup';
 import Login from './components/Login';
-import Home from './components/Home';
+import SellAccounts from './components/SellAccounts';
+import SellLimiteds from './components/SellLimiteds';
 
 const App = () => {
     return (
         <Router>
-            <div>
-                <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/signup" component={Signup} />
-                    <Route path="/login" component={Login} />
-                </Switch>
-            </div>
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/sell-accounts" element={<SellAccounts />} />
+                <Route path="/sell-limiteds" element={<SellLimiteds />} />
+            </Routes>
         </Router>
     );
 };
