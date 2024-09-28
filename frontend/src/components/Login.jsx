@@ -1,46 +1,68 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { loginUser } from '../api/api'; // Assume this makes the API call
 
 const Login = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [loginError, setLoginError] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-    const handleLogin = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await axios.post('/api/auth/login', { username, password });
-            alert('Logged in successfully!');
-            // Optionally store the token and redirect
-        } catch (error) {
-            console.error('Login error:', error);
-            setLoginError(error.response?.data.message || 'Error logging in.');
-        }
-    };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    return (
-        <div className="login-container">
-            <form onSubmit={handleLogin}>
-                <h2>Login</h2>
-                <input
-                    type="text"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    placeholder="Username"
-                    required
-                />
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                />
-                <button type="submit">Login</button>
-                {loginError && <p style={{ color: 'red' }}>{loginError}</p>}
-            </form>
-        </div>
-    );
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, password } = formData;
+
+    try {
+      const response = await loginUser(username, password);
+      if (response.message === 'Invalid username or password') {
+        setError('Invalid username or password');
+      } else {
+        setSuccess('Login successful!');
+        setError('');
+        // Handle storing token or redirecting user
+      }
+    } catch (err) {
+      setError('Error logging in');
+      setSuccess('');
+    }
+  };
+
+  return (
+    <div className="login-form">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username:
+          <input 
+            type="text" 
+            name="username" 
+            value={formData.username} 
+            onChange={handleInputChange} 
+            required 
+          />
+        </label>
+        <label>
+          Password:
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password} 
+            onChange={handleInputChange} 
+            required 
+          />
+        </label>
+        <button type="submit">Login</button>
+      </form>
+      {success && <p className="success-text">{success}</p>}
+      {error && <p className="error-text">{error}</p>}
+    </div>
+  );
 };
 
 export default Login;
