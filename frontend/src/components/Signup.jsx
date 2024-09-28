@@ -1,72 +1,79 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { signupUser } from '../api/api'; // Assume this makes the API call
 
 const Signup = () => {
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [usernameError, setUsernameError] = useState('');
-    const [signupError, setSignupError] = useState('');
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+  });
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-   const handleUsernameChange = async (e) => {
-    const { value } = e.target;
-    setUsername(value); // Update the username state
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-    if (!value) {
-        setUsernameError('');
-        return; // Exit if the input is empty
-    }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, email, password } = formData;
 
     try {
-        const response = await axios.post('/api/auth/check-username', { username: value });
-        setUsernameError(response.data.message === 'Username is available.' ? '' : 'Username is taken.');
-    } catch (error) {
-        console.error('Error checking username:', error);
-        setUsernameError('Error checking username.'); // Provide a clear message
+      const response = await signupUser(username, email, password);
+      if (response.message === 'Username is taken') {
+        setError('Username is taken');
+      } else {
+        setSuccess('Account created successfully!');
+        setError('');
+      }
+    } catch (err) {
+      setError('Error signing up');
+      setSuccess('');
     }
-};
+  };
 
-    const handleSignup = async (e) => {
-        e.preventDefault();
-
-        if (usernameError) {
-            setSignupError('Please fix the errors above before submitting.');
-            return;
-        }
-
-        try {
-            const response = await axios.post('/api/auth/signup', { username, password });
-            alert(response.data.message);
-            // Optionally redirect to login or homepage
-        } catch (error) {
-            console.error('Signup error:', error);
-            setSignupError(error.response?.data.message || 'Error signing up.');
-        }
-    };
-
-    return (
-        <div className="signup-container">
-            <form onSubmit={handleSignup}>
-                <h2>Sign Up</h2>
-                <input
-                    type="text"
-                    value={username}
-                    onChange={handleUsernameChange}
-                    placeholder="Username"
-                    required
-                />
-                {usernameError && <p style={{ color: 'red' }}>{usernameError}</p>}
-                <input
-                    type="password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Password"
-                    required
-                />
-                <button type="submit">Join Now</button>
-                {signupError && <p style={{ color: 'red' }}>{signupError}</p>}
-            </form>
-        </div>
-    );
+  return (
+    <div className="signup-form">
+      <h2>Sign Up</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username:
+          <input 
+            type="text" 
+            name="username" 
+            value={formData.username} 
+            onChange={handleInputChange} 
+            required 
+          />
+          {error === 'Username is taken' && <p className="error-text">Username is taken.</p>}
+        </label>
+        <label>
+          Email:
+          <input 
+            type="email" 
+            name="email" 
+            value={formData.email} 
+            onChange={handleInputChange} 
+            required 
+          />
+        </label>
+        <label>
+          Password:
+          <input 
+            type="password" 
+            name="password" 
+            value={formData.password} 
+            onChange={handleInputChange} 
+            required 
+          />
+        </label>
+        <button type="submit">Sign Up</button>
+      </form>
+      {success && <p className="success-text">{success}</p>}
+      {error && <p className="error-text">{error}</p>}
+    </div>
+  );
 };
 
 export default Signup;
