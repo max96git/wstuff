@@ -1,1 +1,25 @@
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
 
+.publish-button {
+    background-color: #007bff; /* Bootstrap primary color */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 10px;
+    transition: background-color 0.3s;
+}
+
+.publish-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+.latest-items {
+    margin-top: 30px;
+}
