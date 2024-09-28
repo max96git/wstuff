@@ -1,10 +1,6 @@
 [build]
-  functions = "netlify/functions"
-
-[build.environment]
-  NODE_VERSION = "16.x" # or any version you want to use
-
-[[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
-  status = 200
+  command = "npm install && npm run build"
+  publish = "build"
+  environment = { NODE_VERSION = "16.14.0" }
+[context.production.environment]
+  NODE_VERSION = "16.14.0"
