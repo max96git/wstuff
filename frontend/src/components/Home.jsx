@@ -1,48 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { fetchLatestItems } from '../api/api'; // Import your API function to fetch latest items
+import { fetchLatestItems } from '../api/api';
+import SellLimiteds from './SellLimiteds';
+import SellAccounts from './SellAccounts';
 
 const Home = () => {
     const [latestItems, setLatestItems] = useState([]);
 
-    useEffect(() => {
-        const getLatestItems = async () => {
+    const loadLatestItems = async () => {
+        try {
             const items = await fetchLatestItems();
             setLatestItems(items);
-        };
+        } catch (error) {
+            console.error("Error fetching latest items:", error);
+        }
+    };
 
-        getLatestItems();
+    useEffect(() => {
+        loadLatestItems();
     }, []);
 
     return (
-        <div style={{ textAlign: 'center', padding: '20px' }}>
+        <div>
             <h1>Welcome to the Marketplace</h1>
-
-            <div className="button-container">
-                <Link to="/sell-limiteds">
-                    <button className="publish-button">Publish Limited</button>
-                </Link>
-                <Link to="/sell-accounts">
-                    <button className="publish-button">Publish Account</button>
-                </Link>
-            </div>
-
-            <div className="latest-items">
-                <h2>Latest Items</h2>
-                {latestItems.length > 0 ? (
-                    <ul>
-                        {latestItems.map(item => (
-                            <li key={item.id}>
-                                <a href={item.link} target="_blank" rel="noopener noreferrer">
-                                    {item.name}
-                                </a>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p>No items available.</p>
-                )}
-            </div>
+            <button onClick={() => /* Logic to open SellLimiteds */}>
+                Publish Limited Item
+            </button>
+            <button onClick={() => /* Logic to open SellAccounts */}>
+                Publish Account
+            </button>
+            <h2>Latest Items</h2>
+            <ul>
+                {latestItems.map((item) => (
+                    <li key={item.id}>
+                        {item.itemLink || item.accountLink} - {item.paymentMethod}
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
