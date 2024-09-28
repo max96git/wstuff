@@ -1,13 +1,13 @@
 // src/components/Home.jsx
 import React from 'react';
-import { useHistory } from 'react-router-dom';
-import './Home.css'; // Custom CSS for styling
+import { useNavigate } from 'react-router-dom'; // Change to useNavigate
+import './Home.css'; // Import your CSS
 
 const Home = () => {
-    const history = useHistory();
+    const navigate = useNavigate(); // Initialize useNavigate
 
     const handleJoinNow = () => {
-        history.push('/signup');
+        navigate('/signup'); // Use navigate to go to the signup page
     };
 
     return (
