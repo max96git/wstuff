@@ -14,10 +14,9 @@ const SellLimiteds = () => {
         paymentMethod,
         walletAddress,
       });
-      // Handle success response
       console.log('Item published:', response.data);
     } catch (error) {
-      console.error('Error publishing item:', error);
+      console.error('Error publishing item:', error.response ? error.response.data : error.message);
     }
   };
 
