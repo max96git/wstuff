@@ -33,15 +33,17 @@ export const checkUsernameAvailability = async (username) => {
     }
 };
 
-// Function to fetch the latest items
-export const fetchLatestItems = async () => {
-    try {
-        const response = await axios.get(`${API_URL}/latest-items`);
-        return response.data; // Returns the latest items
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error fetching latest items');
-    }
+export const publishLimitedItem = async (itemData) => {
+    const response = await axios.post(`${API_URL}/publish-limited`, itemData);
+    return response.data;
 };
 
-// Additional API functions can be added here
+export const publishAccount = async (accountData) => {
+    const response = await axios.post(`${API_URL}/publish-account`, accountData);
+    return response.data;
+};
 
+export const fetchLatestItems = async () => {
+    const response = await axios.get(`${API_URL}/latest-items`);
+    return response.data;
+};
