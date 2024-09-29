@@ -1,49 +1,52 @@
-import axios from 'axios';
+const express = require('express');
+const router = express.Router();
+const LimitedItem = require('../models/LimitedItem');
+const Account = require('../models/Account');
 
-// Base URL for your API (adjust as necessary)
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+// Route to get all items (limiteds and accounts)
+router.get('/items', async (req, res) => {
+  try {
+    const limiteds = await LimitedItem.find();
+    const accounts = await Account.find();
+    const items = [...limiteds, ...accounts];
+    res.json(items);
+  } catch (error) {
+    res.status(500).send('Server error');
+  }
+});
 
-// Function to handle user signup
-export const signupUser = async (userData) => {
-    try {
-        const response = await axios.post(`${API_URL}/signup`, userData);
-        return response.data; // Returns the response data from the server
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Signup failed');
-    }
-};
+// Route to publish a limited
+router.post('/limiteds', async (req, res) => {
+  const { itemLink, paymentMethod, walletAddress, amount } = req.body;
+  try {
+    const newLimited = new LimitedItem({
+      itemLink,
+      paymentMethod,
+      walletAddress,
+      amount,
+    });
+    await newLimited.save();
+    res.status(201).json(newLimited);
+  } catch (error) {
+    res.status(500).send('Error publishing limited');
+  }
+});
 
-// Function to handle user login
-export const loginUser = async (userData) => {
-    try {
-        const response = await axios.post(`${API_URL}/login`, userData);
-        return response.data; // Returns the response data from the server
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Login failed');
-    }
-};
+// Route to publish an account
+router.post('/accounts', async (req, res) => {
+  const { accountLink, paymentMethod, cryptoAddress, amount } = req.body;
+  try {
+    const newAccount = new Account({
+      accountLink,
+      paymentMethod,
+      cryptoAddress,
+      amount,
+    });
+    await newAccount.save();
+    res.status(201).json(newAccount);
+  } catch (error) {
+    res.status(500).send('Error publishing account');
+  }
+});
 
-// Function to check if a username is available
-export const checkUsernameAvailability = async (username) => {
-    try {
-        const response = await axios.get(`${API_URL}/check-username/${username}`);
-        return response.data; // Returns availability status
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Error checking username');
-    }
-};
-
-export const publishLimitedItem = async (itemData) => {
-    const response = await axios.post(`${API_URL}/publish-limited`, itemData);
-    return response.data;
-};
-
-export const publishAccount = async (accountData) => {
-    const response = await axios.post(`${API_URL}/publish-account`, accountData);
-    return response.data;
-};
-
-export const fetchLatestItems = async () => {
-    const response = await axios.get(`${API_URL}/latest-items`);
-    return response.data;
-};
+module.exports = router;
