@@ -28,7 +28,7 @@ router.post('/limiteds', async (req, res) => {
     await newLimited.save();
     res.status(201).json(newLimited);
   } catch (error) {
-    res.status(500).send('Error publishing limited');
+    res.status(500).send('Error selling limited');
   }
 });
 
@@ -45,7 +45,7 @@ router.post('/accounts', async (req, res) => {
     await newAccount.save();
     res.status(201).json(newAccount);
   } catch (error) {
-    res.status(500).send('Error publishing account');
+    res.status(500).send('Error selling account');
   }
 });
 
