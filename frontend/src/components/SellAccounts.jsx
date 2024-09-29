@@ -1,33 +1,31 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SellAccounts = () => {
-  const [paymentMethod, setPaymentMethod] = useState('paypal');
   const [accountLink, setAccountLink] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('paypal');
   const [cryptoAddress, setCryptoAddress] = useState('');
   const [amount, setAmount] = useState('');
+  const navigate = useNavigate();
 
-  const handlePaymentMethodChange = (event) => {
-    setPaymentMethod(event.target.value);
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
-      const response = await axios.post('/api/sell-accounts', {
+      await axios.post('/api/accounts', {
         accountLink,
         paymentMethod,
         cryptoAddress,
         amount,
       });
-      console.log('Account published:', response.data);
+      navigate('/');
     } catch (error) {
-      console.error('Error publishing account:', error.response ? error.response.data : error.message);
+      console.error('Error publishing account:', error);
     }
   };
 
   return (
-    <div className="sell-accounts">
+    <div>
       <h2>Sell Accounts</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -43,7 +41,7 @@ const SellAccounts = () => {
         
         <div>
           <label>Payment Method:</label>
-          <select value={paymentMethod} onChange={handlePaymentMethodChange}>
+          <select value={paymentMethod} onChange={(e) => setPaymentMethod(e.target.value)}>
             <option value="paypal">PayPal</option>
             <option value="crypto">Crypto</option>
           </select>
