@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SellLimiteds from './SellLimiteds';
 import SellAccounts from './SellAccounts';
+import Navbar from './Navbar';
 
 const Home = () => {
   const [items, setItems] = useState([]);
