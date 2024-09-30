@@ -1,0 +1,51 @@
+.container {
+  padding: 40px;
+  background-color: #121417;
+  color: white;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.header p {
+  font-size: 1.25rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.itemsSection h2 {
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.itemsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.itemCard {
+  background-color: #1b1f24;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.itemCard h3 {
+  font-size: 1.5rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.itemCard span {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
