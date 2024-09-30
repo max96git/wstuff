@@ -8,7 +8,7 @@ const App = () => {
             <div>
                 <Navbar />
                 <Switch>
-                    <Route path="/" exact component={Home} />
+                    <Route path="/" element={<Home />} />
                     {/* others.. */}
                 </Switch>
             </div>
