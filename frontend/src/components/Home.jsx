@@ -1,79 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import './Home.css';
-import { Link } from 'react-router-dom';
+import { fetchItems } from '../api/api';
+import ItemCard from '../components/ItemCard';
 
 const Home = () => {
-  const [latestItems, setLatestItems] = useState([]);
-  const [error, setError] = useState('');
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchItems = async () => {
-      try {
-        const response = await axios.get('http://localhost:5000/api/items');
-        setLatestItems(response.data);
-      } catch (err) {
-        setError('Error fetching items: ' + err.message);
-      }
-    };
+    useEffect(() => {
+        const getItems = async () => {
+            try {
+                const fetchedItems = await fetchItems();
+                setItems(fetchedItems);
+            } catch (error) {
+                console.error('Error fetching items:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-    fetchItems();
-  }, []);
+        getItems();
+    }, []);
 
-  return (
-    <div className="home-container">
-      <header className="home-header">
-        <div className="logo">
-          <h1>Hexanoid</h1>
-        </div>
-        <nav>
-          <ul>
-            <li><Link to="/sell-limiteds">Sell Limiteds</Link></li>
-            <li><Link to="/sell-accounts">Sell Accounts</Link></li>
-            <li><Link to="/login">Login</Link></li>
-            <li><Link to="/signup">Sign Up</Link></li>
-          </ul>
-        </nav>
-      </header>
-
-      <section className="hero-section">
-        <div className="hero-content">
-          <h2>Buy & Sell Roblox Limiteds and Accounts</h2>
-          <p>Your trusted marketplace for exclusive Roblox limited items and accounts. Start trading now!</p>
-          <div className="cta-buttons">
-            <Link to="/sell-limiteds" className="cta-btn">Sell Limiteds</Link>
-            <Link to="/sell-accounts" className="cta-btn">Sell Accounts</Link>
-          </div>
-        </div>
-      </section>
-
-      <section className="latest-items">
-        <h2>Latest Items</h2>
-        {error ? (
-          <p className="error">{error}</p>
-        ) : (
-          <div className="items-grid">
-            {latestItems.length === 0 ? (
-              <p>No items available yet.</p>
+    return (
+        <div>
+            <h1>Welcome to Hexanoid</h1>
+            <h2>Available Items</h2>
+            {loading ? (
+                <p>Loading...</p>
             ) : (
-              latestItems.map((item) => (
-                <div className="item-card" key={item.id}>
-                  <h3>{item.name}</h3>
-                  <p>Price: {item.price}</p>
-                  <p>Seller: {item.seller}</p>
-                  <Link to={`/items/${item.id}`} className="view-btn">View Details</Link>
+                <div className="item-list">
+                    {items.map((item) => (
+                        <ItemCard key={item._id} item={item} />
+                    ))}
                 </div>
-              ))
             )}
-          </div>
-        )}
-      </section>
-
-      <footer className="home-footer">
-        <p>© 2024 Hexanoid. All rights reserved.</p>
-      </footer>
-    </div>
-  );
+        </div>
+    );
 };
 
 export default Home;
