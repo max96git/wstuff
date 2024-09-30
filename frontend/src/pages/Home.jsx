@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './Home.css';  // Add custom styling for modern look
+import '../styles/Home.css';
 import Navbar from './Navbar';
 
 const Home = () => {
