@@ -1,50 +1,42 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/Home.css';
-import Navbar from './Navbar';
+import styles from '../styles/Home.module.css';
 
 const Home = () => {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/items')
-      .then(response => {
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get('/api/items');
         setItems(response.data);
         setLoading(false);
-      })
-      .catch(error => {
-        setError(`Error fetching items: ${error.message}`);
-        setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+    fetchItems();
   }, []);
 
   return (
-    <div className="home-container">
-      <Navbar />
-      <header className="hero-section">
-        <div className="hero-content">
-          <h1 className="hero-title">Welcome to Hexanoid</h1>
-          <p className="hero-subtitle">Buy and sell Roblox Limiteds and accounts with ease</p>
-          <button className="cta-button">Explore the Market</button>
-        </div>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Welcome to Hexanoid</h1>
+        <p>Buy and sell Roblox limiteds and accounts with ease.</p>
       </header>
 
-      <section className="latest-items">
+      <section className={styles.itemsSection}>
         <h2>Latest Listings</h2>
         {loading ? (
           <p>Loading items...</p>
-        ) : error ? (
-          <p>{error}</p>
         ) : (
-          <div className="items-grid">
+          <div className={styles.itemsGrid}>
             {items.map(item => (
-              <div key={item.id} className="item-card">
-                <img src={item.image} alt={item.name} className="item-image"/>
-                <h3 className="item-title">{item.name}</h3>
-                <p className="item-price">${item.price}</p>
-                <button className="buy-button">Buy</button>
+              <div key={item.id} className={styles.itemCard}>
+                <h3>{item.name}</h3>
+                <p>{item.description}</p>
+                <span>Price: {item.price} USD</span>
               </div>
             ))}
           </div>
