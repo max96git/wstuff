@@ -1,17 +1,31 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Navbar.css';  // Modern CSS for Navbar
+import Link from 'next/link';
+import styles from '../styles/Navbar.module.css';
 
 const Navbar = () => {
   return (
-    <nav className="navbar">
-      <div className="navbar-logo">
-        <Link to="/">Hexanoid</Link>
+    <nav className={styles.navbar}>
+      <div className={styles.logo}>
+        <Link href="/">
+          <a>Hexanoid</a>
+        </Link>
       </div>
-      <ul className="navbar-links">
-        <li><Link to="/limiteds">Limiteds</Link></li>
-        <li><Link to="/accounts">Accounts</Link></li>
-        <li><Link to="/sell">Sell</Link></li>
+      <ul className={styles.navLinks}>
+        <li>
+          <Link href="/marketplace">
+            <a>Marketplace</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/sell">
+            <a>Sell Items</a>
+          </Link>
+        </li>
+        <li>
+          <Link href="/account">
+            <a>Account</a>
+          </Link>
+        </li>
       </ul>
     </nav>
   );
